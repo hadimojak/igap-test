@@ -23,7 +23,7 @@ let SddController = class SddController {
     createTable(body) {
         if (!body.tableName)
             throw new common_1.HttpException('missing tableName', common_1.HttpStatus.BAD_REQUEST);
-        return this.sddService.createTable(body.tableName, body.type);
+        return this.sddService.createTable(body.tableName);
     }
     deleteTable(tableName) {
         return this.sddService.deleteTable(tableName);
@@ -56,23 +56,23 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "createTable", null);
 __decorate([
-    (0, common_1.Delete)(':table'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Delete)(':tableName'),
+    __param(0, (0, common_1.Param)('tableName')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "deleteTable", null);
 __decorate([
-    (0, common_1.Post)(':table'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Post)(':tableName'),
+    __param(0, (0, common_1.Param)('tableName')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Object)
 ], SddController.prototype, "insertRecord", null);
 __decorate([
-    (0, common_1.Get)(':table'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Get)(':tableName'),
+    __param(0, (0, common_1.Param)('tableName')),
     __param(1, (0, common_1.Query)('skip')),
     __param(2, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
@@ -80,16 +80,16 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "getAllRecords", null);
 __decorate([
-    (0, common_1.Get)(':table/:id'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Get)(':tableName/:id'),
+    __param(0, (0, common_1.Param)('tableName')),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "getRecord", null);
 __decorate([
-    (0, common_1.Put)(':table/:id'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Put)(':tableName/:id'),
+    __param(0, (0, common_1.Param)('tableName')),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -97,8 +97,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "updateRecord", null);
 __decorate([
-    (0, common_1.Delete)(':table/:id'),
-    __param(0, (0, common_1.Param)('table')),
+    (0, common_1.Delete)(':tableName/:id'),
+    __param(0, (0, common_1.Param)('tableName')),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),

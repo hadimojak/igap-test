@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'yaml';
@@ -12,7 +12,6 @@ const DATA_DIR = path.resolve(__dirname, '../../data');
 type StoreType = 'JSON' | 'YAML' | 'BINARY';
 
 const storeType = process.env.SDD_STORE_TYPE as StoreType;
-console.log({ storeType });
 
 @Injectable()
 export class SddService {
@@ -20,6 +19,7 @@ export class SddService {
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
   }
 
+  //utilities method
   private getFilePath(tableName: string): string {
     const ext =
       storeType === 'YAML' ? 'yaml' : storeType === 'BINARY' ? 'bin' : 'json';
@@ -45,7 +45,7 @@ export class SddService {
     }
   }
 
-  writeTable(tableName: string, data: any): void {
+  private writeTable(tableName: string, data: any): void {
     const filePath = this.getFilePath(tableName);
 
     let serialized: string | Buffer;
@@ -53,7 +53,7 @@ export class SddService {
       serialized = yaml.stringify(data);
     } else if (storeType === 'BINARY') {
       const jsonStr = JSON.stringify(data);
-      serialized = Buffer.from(jsonStr, 'utf8'); // or .toString('base64') if storing as string
+      serialized = Buffer.from(jsonStr, 'utf8');
     } else {
       serialized = JSON.stringify(data, null, 2);
     }
@@ -65,7 +65,8 @@ export class SddService {
     );
   }
 
-  createTable(tableName: string, type: string) {
+  //main method
+  createTable(tableName: string) {
     const filePath = this.getFilePath(tableName);
     if (fs.existsSync(filePath))
       return { mesasge: `table ${tableName} already exict` };
@@ -88,28 +89,6 @@ export class SddService {
       storeType === 'BINARY' ? undefined : 'utf8',
     );
 
-    // Metadata is always stored as JSON (not binary)
-    const metaPath = path.join(DATA_DIR, '_meta.json');
-    const meta = fs.existsSync(metaPath)
-      ? JSON.parse(fs.readFileSync(metaPath, 'utf8'))
-      : {};
-    meta[tableName] = {
-      type: type || 'generic',
-      format: storeType,
-      createdAt: new Date().toISOString(),
-    };
-    fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
-
-    return { message: `table ${tableName} created` };
-  }
-
-  deleteTable(tableName: string) {
-    const filePath = this.getFilePath(tableName);
-    if (!fs.existsSync(filePath)) throw new Error('Table not found');
-
-    fs.unlinkSync(filePath);
-
-    // Remove metadata
     const metaPath = path.join(DATA_DIR, '_meta.json');
     if (fs.existsSync(metaPath)) {
       const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
@@ -117,13 +96,26 @@ export class SddService {
       fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
     }
 
+    return { message: `table: '${tableName}' created` };
+  }
+
+  deleteTable(tableName: string) {
+    const filePath = this.getFilePath(tableName);
+    if (!fs.existsSync(filePath))
+      throw new HttpException('Table not found', HttpStatus.NOT_FOUND);
+
+    fs.unlinkSync(filePath);
+
     return { message: `Table "${tableName}" deleted successfully.` };
   }
 
   insertRecord(tableName: string, record: any) {
     const records = this.readTable(tableName);
+
     const id = uuid();
     const newRecord = { id, ...record };
+    console.log({ newRecord });
+
     records.push(newRecord);
     this.writeTable(tableName, records);
     return newRecord;
@@ -137,14 +129,16 @@ export class SddService {
   getRecord(tableName: string, id: string) {
     const records = this.readTable(tableName);
     const record = records.find((r) => r.id === id);
-    if (!record) throw new Error('Record not found');
+    if (!record)
+      throw new HttpException('recond not found', HttpStatus.NOT_FOUND);
     return record;
   }
 
   updateRecord(tableName: string, id: string, update: any) {
     const records = this.readTable(tableName);
     const index = records.findIndex((r) => r.id === id);
-    if (index === -1) throw new Error('Record not found');
+    if (index === -1)
+      throw new HttpException('recond not found', HttpStatus.NOT_FOUND);
 
     records[index] = { ...records[index], ...update };
     this.writeTable(tableName, records);
@@ -154,7 +148,8 @@ export class SddService {
   deleteRecord(tableName: string, id: string) {
     const records = this.readTable(tableName);
     const index = records.findIndex((r) => r.id === id);
-    if (index === -1) throw new Error('Record not found');
+    if (index === -1)
+      throw new HttpException('recond not found', HttpStatus.NOT_FOUND);
 
     const deleted = records.splice(index, 1)[0];
     this.writeTable(tableName, records);

@@ -2,8 +2,8 @@ export declare class SddService {
     constructor();
     private getFilePath;
     private readTable;
-    writeTable(tableName: string, data: any): void;
-    createTable(tableName: string, type: string): {
+    private writeTable;
+    createTable(tableName: string): {
         mesasge: string;
         message?: undefined;
     } | {

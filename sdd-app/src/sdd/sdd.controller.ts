@@ -17,27 +17,27 @@ export class SddController {
   constructor(private readonly sddService: SddService) {}
 
   @Post('create')
-  createTable(@Body() body: { tableName: string; type: string }) {
+  createTable(@Body() body: { tableName: string;}) {
     if (!body.tableName)
       throw new HttpException('missing tableName', HttpStatus.BAD_REQUEST);
-    return this.sddService.createTable(body.tableName, body.type);
+    return this.sddService.createTable(body.tableName);
   }
 
-  @Delete(':table')
-  deleteTable(@Param('table') tableName: string) {
+  @Delete(':tableName')
+  deleteTable(@Param('tableName') tableName: string) {
     return this.sddService.deleteTable(tableName);
   }
 
   // --- Insert Record ---
-  @Post(':table')
-  insertRecord(@Param('table') tableName: string, @Body() data: any): any {
+  @Post(':tableName')
+  insertRecord(@Param('tableName') tableName: string, @Body() data: any): any {
     return this.sddService.insertRecord(tableName, data);
   }
 
   // --- Get All Records ---
-  @Get(':table')
+  @Get(':tableName')
   getAllRecords(
-    @Param('table') tableName: string,
+    @Param('tableName') tableName: string,
     @Query('skip') skip = 0,
     @Query('limit') limit = 100,
   ) {
@@ -45,15 +45,15 @@ export class SddController {
   }
 
   // --- Get One Record by ID ---
-  @Get(':table/:id')
-  getRecord(@Param('table') tableName: string, @Param('id') id: string) {
+  @Get(':tableName/:id')
+  getRecord(@Param('tableName') tableName: string, @Param('id') id: string) {
     return this.sddService.getRecord(tableName, id);
   }
 
   // --- Update Record by ID ---
-  @Put(':table/:id')
+  @Put(':tableName/:id')
   updateRecord(
-    @Param('table') tableName: string,
+    @Param('tableName') tableName: string,
     @Param('id') id: string,
     @Body() update: any,
   ) {
@@ -61,8 +61,8 @@ export class SddController {
   }
 
   // --- Delete Record by ID ---
-  @Delete(':table/:id')
-  deleteRecord(@Param('table') tableName: string, @Param('id') id: string) {
+  @Delete(':tableName/:id')
+  deleteRecord(@Param('tableName') tableName: string, @Param('id') id: string) {
     return this.sddService.deleteRecord(tableName, id);
   }
 

@@ -4,7 +4,6 @@ export declare class SddController {
     constructor(sddService: SddService);
     createTable(body: {
         tableName: string;
-        type: string;
     }): {
         mesasge: string;
         message?: undefined;
