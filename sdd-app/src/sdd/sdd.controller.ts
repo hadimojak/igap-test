@@ -25,4 +25,9 @@ export class SddController {
       throw new HttpException('missing tableName', HttpStatus.BAD_REQUEST);
     return this.sddService.createTable(tableName, type);
   }
+
+  @Delete(':tableName')
+  async deleteTable(@Param('tableName') tableName: string) {
+    return this.sddService.deleteTable(tableName);
+  }
 }

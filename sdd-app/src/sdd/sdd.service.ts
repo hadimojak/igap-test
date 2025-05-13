@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as yaml from 'yaml';
+import { v4 as uuid } from 'uuid';
+
+const DATA_DIR = path.resolve(__dirname, '../../data');
+type StoreType = 'json' | 'yaml';
+
+const storeType = 
 
 @Injectable()
 export class SddService {
