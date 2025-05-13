@@ -17,6 +17,7 @@ const yaml = require("yaml");
 const uuid_1 = require("uuid");
 const DATA_DIR = path.resolve(__dirname, '../../data');
 const storeType = process.env.SDD_STORE_TYPE;
+console.log({ storeType });
 let SddService = class SddService {
     constructor() {
         if (!fs.existsSync(DATA_DIR))

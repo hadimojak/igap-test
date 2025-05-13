@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Injectable,HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'yaml';
@@ -11,6 +12,7 @@ const DATA_DIR = path.resolve(__dirname, '../../data');
 type StoreType = 'JSON' | 'YAML' | 'BINARY';
 
 const storeType = process.env.SDD_STORE_TYPE as StoreType;
+console.log({ storeType });
 
 @Injectable()
 export class SddService {

@@ -20,21 +20,96 @@ let SddController = class SddController {
     constructor(sddService) {
         this.sddService = sddService;
     }
-    createTable(tableName, type) {
-        if (!tableName)
+    createTable(body) {
+        if (!body.tableName)
             throw new common_1.HttpException('missing tableName', common_1.HttpStatus.BAD_REQUEST);
-        return this.sddService.createTable(tableName, type);
+        return this.sddService.createTable(body.tableName, body.type);
+    }
+    deleteTable(tableName) {
+        return this.sddService.deleteTable(tableName);
+    }
+    insertRecord(tableName, data) {
+        return this.sddService.insertRecord(tableName, data);
+    }
+    getAllRecords(tableName, skip = 0, limit = 100) {
+        return this.sddService.getAllRecords(tableName, skip, limit);
+    }
+    getRecord(tableName, id) {
+        return this.sddService.getRecord(tableName, id);
+    }
+    updateRecord(tableName, id, update) {
+        return this.sddService.updateRecord(tableName, id, update);
+    }
+    deleteRecord(tableName, id) {
+        return this.sddService.deleteRecord(tableName, id);
+    }
+    listCollections() {
+        return this.sddService.listCollections();
     }
 };
 exports.SddController = SddController;
 __decorate([
     (0, common_1.Post)('create'),
-    __param(0, (0, common_1.Body)('tableName')),
-    __param(1, (0, common_1.Body)('type')),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], SddController.prototype, "createTable", null);
+__decorate([
+    (0, common_1.Delete)(':table'),
+    __param(0, (0, common_1.Param)('table')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], SddController.prototype, "deleteTable", null);
+__decorate([
+    (0, common_1.Post)(':table'),
+    __param(0, (0, common_1.Param)('table')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Object)
+], SddController.prototype, "insertRecord", null);
+__decorate([
+    (0, common_1.Get)(':table'),
+    __param(0, (0, common_1.Param)('table')),
+    __param(1, (0, common_1.Query)('skip')),
+    __param(2, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", void 0)
+], SddController.prototype, "getAllRecords", null);
+__decorate([
+    (0, common_1.Get)(':table/:id'),
+    __param(0, (0, common_1.Param)('table')),
+    __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
-], SddController.prototype, "createTable", null);
+], SddController.prototype, "getRecord", null);
+__decorate([
+    (0, common_1.Put)(':table/:id'),
+    __param(0, (0, common_1.Param)('table')),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", void 0)
+], SddController.prototype, "updateRecord", null);
+__decorate([
+    (0, common_1.Delete)(':table/:id'),
+    __param(0, (0, common_1.Param)('table')),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], SddController.prototype, "deleteRecord", null);
+__decorate([
+    (0, common_1.Get)('collections'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Object)
+], SddController.prototype, "listCollections", null);
 exports.SddController = SddController = __decorate([
     (0, common_1.Controller)('sdd'),
     __metadata("design:paramtypes", [sdd_service_1.SddService])
