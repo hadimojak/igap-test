@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SddController = void 0;
 const common_1 = require("@nestjs/common");
@@ -26,9 +25,6 @@ let SddController = class SddController {
             throw new common_1.HttpException('missing tableName', common_1.HttpStatus.BAD_REQUEST);
         return this.sddService.createTable(tableName, type);
     }
-    async deleteTable(tableName) {
-        return this.sddService.deleteTable(tableName);
-    }
 };
 exports.SddController = SddController;
 __decorate([
@@ -39,15 +35,8 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "createTable", null);
-__decorate([
-    (0, common_1.Delete)(':tableName'),
-    __param(0, (0, common_1.Param)('tableName')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], SddController.prototype, "deleteTable", null);
 exports.SddController = SddController = __decorate([
     (0, common_1.Controller)('sdd'),
-    __metadata("design:paramtypes", [typeof (_a = typeof sdd_service_1.SddService !== "undefined" && sdd_service_1.SddService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [sdd_service_1.SddService])
 ], SddController);
 //# sourceMappingURL=sdd.controller.js.map

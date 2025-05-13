@@ -26,8 +26,8 @@ export class SddController {
     return this.sddService.createTable(tableName, type);
   }
 
-  @Delete(':tableName')
-  async deleteTable(@Param('tableName') tableName: string) {
-    return this.sddService.deleteTable(tableName);
-  }
+  // @Delete(':tableName')
+  // // async deleteTable(@Param('tableName') tableName: string) {
+  // //   return this.sddService.deleteTable(tableName);
+  // }
 }
