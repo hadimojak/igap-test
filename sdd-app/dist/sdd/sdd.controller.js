@@ -25,25 +25,26 @@ let SddController = class SddController {
             throw new common_1.HttpException('missing tableName', common_1.HttpStatus.BAD_REQUEST);
         return this.sddService.createTable(body.tableName);
     }
-    deleteTable(tableName) {
-        return this.sddService.deleteTable(tableName);
+    deleteTable(params) {
+        return this.sddService.deleteTable(params.tableName);
     }
-    insertRecord(tableName, data) {
-        return this.sddService.insertRecord(tableName, data);
+    insertRecord(params, data) {
+        return this.sddService.insertRecord(params.tableName, data);
     }
-    getAllRecords(tableName, skip = 0, limit = 100) {
-        return this.sddService.getAllRecords(tableName, skip, limit);
+    getAllRecords(params, query) {
+        return this.sddService.getAllRecords(params.tableName, query.skip ?? 0, query.limit ?? 100);
     }
-    getRecord(tableName, id) {
-        return this.sddService.getRecord(tableName, id);
+    getRecord(params) {
+        return this.sddService.getRecord(params.tableName, params.id);
     }
-    updateRecord(tableName, id, update) {
-        return this.sddService.updateRecord(tableName, id, update);
+    updateRecord(params, update) {
+        return this.sddService.updateRecord(params.tableName, params.id, update);
     }
     deleteRecord(tableName, id) {
         return this.sddService.deleteRecord(tableName, id);
     }
     listCollections() {
+        console.log('heeeeeeeerrrree');
         return this.sddService.listCollections();
     }
 };
@@ -57,43 +58,40 @@ __decorate([
 ], SddController.prototype, "createTable", null);
 __decorate([
     (0, common_1.Delete)(':tableName'),
-    __param(0, (0, common_1.Param)('tableName')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "deleteTable", null);
 __decorate([
     (0, common_1.Post)(':tableName'),
-    __param(0, (0, common_1.Param)('tableName')),
+    __param(0, (0, common_1.Param)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Object)
 ], SddController.prototype, "insertRecord", null);
 __decorate([
     (0, common_1.Get)(':tableName'),
-    __param(0, (0, common_1.Param)('tableName')),
-    __param(1, (0, common_1.Query)('skip')),
-    __param(2, (0, common_1.Query)('limit')),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "getAllRecords", null);
 __decorate([
     (0, common_1.Get)(':tableName/:id'),
-    __param(0, (0, common_1.Param)('tableName')),
-    __param(1, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "getRecord", null);
 __decorate([
     (0, common_1.Put)(':tableName/:id'),
-    __param(0, (0, common_1.Param)('tableName')),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)()),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], SddController.prototype, "updateRecord", null);
 __decorate([

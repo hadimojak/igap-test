@@ -87,13 +87,12 @@ let SddService = class SddService {
         if (!fs.existsSync(filePath))
             throw new common_1.HttpException('Table not found', common_1.HttpStatus.NOT_FOUND);
         fs.unlinkSync(filePath);
-        return { message: `Table "${tableName}" deleted successfully.` };
+        return { message: `Table (${tableName}) deleted successfully.` };
     }
     insertRecord(tableName, record) {
         const records = this.readTable(tableName);
         const id = (0, uuid_1.v4)();
         const newRecord = { id, ...record };
-        console.log({ newRecord });
         records.push(newRecord);
         this.writeTable(tableName, records);
         return newRecord;
@@ -128,10 +127,17 @@ let SddService = class SddService {
         return { message: 'Record deleted', record: deleted };
     }
     listCollections() {
-        const metaPath = path.join(DATA_DIR, '_meta.json');
-        if (!fs.existsSync(metaPath))
-            return {};
-        return JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+        if (!fs.existsSync(DATA_DIR))
+            return [];
+        const extension = storeType === 'YAML'
+            ? '.yaml'
+            : storeType === 'BINARY'
+                ? '.bin'
+                : '.json';
+        const files = fs.readdirSync(DATA_DIR);
+        return files
+            .filter((file) => file.endsWith(extension))
+            .map((file) => path.basename(file, extension));
     }
 };
 exports.SddService = SddService;

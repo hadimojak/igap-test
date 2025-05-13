@@ -106,7 +106,7 @@ export class SddService {
 
     fs.unlinkSync(filePath);
 
-    return { message: `Table "${tableName}" deleted successfully.` };
+    return { message: `Table (${tableName}) deleted successfully.` };
   }
 
   insertRecord(tableName: string, record: any) {
@@ -114,7 +114,6 @@ export class SddService {
 
     const id = uuid();
     const newRecord = { id, ...record };
-    console.log({ newRecord });
 
     records.push(newRecord);
     this.writeTable(tableName, records);
@@ -157,8 +156,19 @@ export class SddService {
   }
 
   listCollections() {
-    const metaPath = path.join(DATA_DIR, '_meta.json');
-    if (!fs.existsSync(metaPath)) return {};
-    return JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    if (!fs.existsSync(DATA_DIR)) return [];
+
+    const extension =
+      storeType === 'YAML'
+        ? '.yaml'
+        : storeType === 'BINARY'
+          ? '.bin'
+          : '.json';
+
+    const files = fs.readdirSync(DATA_DIR);
+
+    return files
+      .filter((file) => file.endsWith(extension))
+      .map((file) => path.basename(file, extension));
   }
 }

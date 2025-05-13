@@ -21,5 +21,5 @@ export declare class SddService {
         message: string;
         record: Record<string, any>;
     };
-    listCollections(): any;
+    listCollections(): string[];
 }

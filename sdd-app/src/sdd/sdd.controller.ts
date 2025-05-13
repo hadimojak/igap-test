@@ -11,64 +11,63 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { SddService } from './sdd.service';
+import { MyRecord } from './utilTypes';
 
 @Controller('sdd')
 export class SddController {
   constructor(private readonly sddService: SddService) {}
 
   @Post('create')
-  createTable(@Body() body: { tableName: string;}) {
+  createTable(@Body() body: { tableName: string }) {
     if (!body.tableName)
       throw new HttpException('missing tableName', HttpStatus.BAD_REQUEST);
     return this.sddService.createTable(body.tableName);
   }
 
   @Delete(':tableName')
-  deleteTable(@Param('tableName') tableName: string) {
-    return this.sddService.deleteTable(tableName);
+  deleteTable(@Param() params: { tableName: string }) {
+    return this.sddService.deleteTable(params.tableName);
   }
 
-  // --- Insert Record ---
   @Post(':tableName')
-  insertRecord(@Param('tableName') tableName: string, @Body() data: any): any {
-    return this.sddService.insertRecord(tableName, data);
+  insertRecord(@Param() params: { tableName: string }, @Body() data: any): any {
+    return this.sddService.insertRecord(params.tableName, data);
   }
 
-  // --- Get All Records ---
   @Get(':tableName')
   getAllRecords(
-    @Param('tableName') tableName: string,
-    @Query('skip') skip = 0,
-    @Query('limit') limit = 100,
+    @Param() params: { tableName: string },
+    @Query() query: { skip: number; limit: number },
   ) {
-    return this.sddService.getAllRecords(tableName, skip, limit);
+    return this.sddService.getAllRecords(
+      params.tableName,
+      query.skip ?? 0,
+      query.limit ?? 100,
+    );
   }
 
-  // --- Get One Record by ID ---
   @Get(':tableName/:id')
-  getRecord(@Param('tableName') tableName: string, @Param('id') id: string) {
-    return this.sddService.getRecord(tableName, id);
+  getRecord(@Param() params: { tableName: string; id: string }) {
+    return this.sddService.getRecord(params.tableName, params.id);
   }
 
-  // --- Update Record by ID ---
   @Put(':tableName/:id')
   updateRecord(
-    @Param('tableName') tableName: string,
-    @Param('id') id: string,
-    @Body() update: any,
+    @Param() params: { tableName: string; id: string },
+    @Body() update: MyRecord,
   ) {
-    return this.sddService.updateRecord(tableName, id, update);
+    return this.sddService.updateRecord(params.tableName, params.id, update);
   }
 
-  // --- Delete Record by ID ---
   @Delete(':tableName/:id')
   deleteRecord(@Param('tableName') tableName: string, @Param('id') id: string) {
     return this.sddService.deleteRecord(tableName, id);
   }
 
-  // --- List All Tables ---
   @Get('collections')
   listCollections(): any {
+    console.log('heeeeeeeerrrree');
+
     return this.sddService.listCollections();
   }
 }
