@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
@@ -5,8 +7,8 @@ import { consola } from 'consola';
 
 async function bootstrap() {
   dotenv.config();
-  const app = await NestFactory.create(AppModule);
 
+  const app = await NestFactory.create(AppModule);
   await app.listen(process.env.PORT as string);
 }
 bootstrap()
