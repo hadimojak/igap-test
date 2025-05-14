@@ -4,6 +4,6 @@ import { SddService } from './sdd.service';
 
 @Module({
   controllers: [SddController],
-  providers: [SddService]
+  providers: [SddService],
 })
 export class SddModule {}

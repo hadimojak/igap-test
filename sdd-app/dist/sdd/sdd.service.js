@@ -57,6 +57,12 @@ let SddService = class SddService {
         }
         fs.writeFileSync(filePath, serialized, storeType === 'BINARY' ? null : 'utf8');
     }
+    findTable(tableName) {
+        const filePath = this.getFilePath(tableName);
+        if (!fs.existsSync(filePath))
+            throw new common_1.HttpException('Table not found', common_1.HttpStatus.NOT_FOUND);
+        return filePath;
+    }
     createTable(tableName) {
         const filePath = this.getFilePath(tableName);
         if (fs.existsSync(filePath))
@@ -74,22 +80,15 @@ let SddService = class SddService {
             serialized = JSON.stringify(emptyData, null, 2);
         }
         fs.writeFileSync(filePath, serialized, storeType === 'BINARY' ? undefined : 'utf8');
-        const metaPath = path.join(DATA_DIR, '_meta.json');
-        if (fs.existsSync(metaPath)) {
-            const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-            delete meta[tableName];
-            fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
-        }
         return { message: `table: '${tableName}' created` };
     }
     deleteTable(tableName) {
-        const filePath = this.getFilePath(tableName);
-        if (!fs.existsSync(filePath))
-            throw new common_1.HttpException('Table not found', common_1.HttpStatus.NOT_FOUND);
+        const filePath = this.findTable(tableName);
         fs.unlinkSync(filePath);
         return { message: `Table (${tableName}) deleted successfully.` };
     }
     insertRecord(tableName, record) {
+        this.findTable(tableName);
         const records = this.readTable(tableName);
         const id = (0, uuid_1.v4)();
         const newRecord = { id, ...record };
@@ -129,15 +128,13 @@ let SddService = class SddService {
     listCollections() {
         if (!fs.existsSync(DATA_DIR))
             return [];
-        const extension = storeType === 'YAML'
-            ? '.yaml'
-            : storeType === 'BINARY'
-                ? '.bin'
-                : '.json';
         const files = fs.readdirSync(DATA_DIR);
-        return files
-            .filter((file) => file.endsWith(extension))
-            .map((file) => path.basename(file, extension));
+        const collsGroupBy = files.reduce((acc, val) => {
+            if (val.split('.')[1])
+                (acc[val.split('.')[1]] ||= []).push(val);
+            return acc;
+        }, {});
+        return collsGroupBy;
     }
 };
 exports.SddService = SddService;

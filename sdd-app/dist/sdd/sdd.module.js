@@ -16,7 +16,7 @@ exports.SddModule = SddModule;
 exports.SddModule = SddModule = __decorate([
     (0, common_1.Module)({
         controllers: [sdd_controller_1.SddController],
-        providers: [sdd_service_1.SddService]
+        providers: [sdd_service_1.SddService],
     })
 ], SddModule);
 //# sourceMappingURL=sdd.module.js.map

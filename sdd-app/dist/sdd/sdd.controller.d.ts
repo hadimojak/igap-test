@@ -1,5 +1,4 @@
 import { SddService } from './sdd.service';
-import { MyRecord } from './utilTypes';
 export declare class SddController {
     private readonly sddService;
     constructor(sddService: SddService);
@@ -20,6 +19,7 @@ export declare class SddController {
     insertRecord(params: {
         tableName: string;
     }, data: any): any;
+    listCollections(): any;
     getAllRecords(params: {
         tableName: string;
     }, query: {
@@ -33,10 +33,12 @@ export declare class SddController {
     updateRecord(params: {
         tableName: string;
         id: string;
-    }, update: MyRecord): Record<string, any>;
-    deleteRecord(tableName: string, id: string): {
+    }, update: any): Record<string, any>;
+    deleteRecord(params: {
+        tableName: string;
+        id: string;
+    }): {
         message: string;
         record: Record<string, any>;
     };
-    listCollections(): any;
 }

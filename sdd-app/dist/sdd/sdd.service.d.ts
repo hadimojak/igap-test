@@ -3,6 +3,7 @@ export declare class SddService {
     private getFilePath;
     private readTable;
     private writeTable;
+    private findTable;
     createTable(tableName: string): {
         mesasge: string;
         message?: undefined;
@@ -21,5 +22,5 @@ export declare class SddService {
         message: string;
         record: Record<string, any>;
     };
-    listCollections(): string[];
+    listCollections(): {};
 }
