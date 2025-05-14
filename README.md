@@ -1,111 +1,162 @@
+# SDD (Simple Dumb Database)
 
-# sdd
+This project consists of two main parts:
 
+1. An **HTTP API** for performing CRUD operations on a simple file-based database with multiple collections and unique IDs per record.
+2. A **CLI interface** to interact with the database from the command line.
 
-This project consists of two different parts, the first part of which is use http request fot do crud oprations on sample data base on disk with mutiple collections and unique ids for each record.
+You can switch between **JSON**, **YAML**, and **Binary** storage types using scripts defined in `package.json`. You can also switch between HTTP API and CLI interface using environment-based scripts.
 
-switch between json yaml and binary data bases can be possible with scripts from package.json 
-and also can switch from hhtp request to cli command line with scripts.
+---
 
-## API Reference for http request
+## 📚 API Reference (HTTP)
 
-## createTable
-
-```http
-  POST {BASEURL}/sdd/create 
-```
-- body(json):
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `tableName` | `string` | **Required** |
-
-## listCollections(no inputs)
+### 🔧 Create Table
 
 ```http
-  GET {BASEURL}/sdd/collections
+POST {BASEURL}/sdd/create
 ```
-## insertRecord
+
+#### Request Body (JSON)
+
+| Parameter   | Type     | Description     |
+|-------------|----------|-----------------|
+| `tableName` | `string` | **Required**     |
+
+---
+
+### 📂 List All Collections
 
 ```http
-  POST {BASEURL}/sdd/:tableName
+GET {BASEURL}/sdd/collections
 ```
-- body(json):
-| Key | Value     | Description                |
-| :-------- | :------- | :------------------------- |
-| `key` | `any` | **Required** |
 
-## getAllRecords
+_No inputs required._
+
+---
+
+### ➕ Insert Record
 
 ```http
-  GET {BASEURL}/sdd/:tableName
+POST {BASEURL}/sdd/:tableName
 ```
-- params:
-| Parameter   | Description                |
-| :--------  | :------------------------- |
-| `tableName` | **Required** |
 
-## getRecord
+#### Request Body (JSON)
+
+| Key   | Value | Description           |
+|-------|-------|-----------------------|
+| any   | any   | **Required** record data (schema-less) |
+
+---
+
+### 📄 Get All Records
 
 ```http
-  GET {BASEURL}/sdd/:tableName/:id
+GET {BASEURL}/sdd/:tableName
 ```
-- params:
-| Parameter |  Description                |
-| :-------- |  :------------------------- |
-| `tableName` |  **Required** |
-| `id` |  **Required** |
 
-## updateRecord
+#### Parameters
+
+| Parameter   | Description     |
+|-------------|-----------------|
+| `tableName` | **Required**     |
+
+---
+
+### 📄 Get Single Record
 
 ```http
-  PUT {BASEURL}/sdd/:tableName/:id
+GET {BASEURL}/sdd/:tableName/:id
 ```
-- params:
-| Parameter  | Description                |
-| :--------  | :------------------------- |
-| `tableName`  | **Required** |
-| `id`  | **Required** |
 
-- body(json):
-| Key | Value     | Description                |
-| :-------- | :------- | :------------------------- |
-| `key` | `any` | **Required** |
+#### Parameters
 
-## deleteRecord
+| Parameter   | Description     |
+|-------------|-----------------|
+| `tableName` | **Required**     |
+| `id`        | **Required**     |
+
+---
+
+### ✏️ Update Record
 
 ```http
-  DELETE {BASEURL}/sdd/:tableName/:id
+PUT {BASEURL}/sdd/:tableName/:id
 ```
-- params:
-| Parameter  | Description                |
-| :--------  | :------------------------- |
-| `tableName`  | **Required** |
-| `id`  | **Required** |
 
-## deleteTable
+#### Parameters
+
+| Parameter   | Description     |
+|-------------|-----------------|
+| `tableName` | **Required**     |
+| `id`        | **Required**     |
+
+#### Request Body (JSON)
+
+| Key   | Value | Description           |
+|-------|-------|-----------------------|
+| any   | any   | **Required** updated fields |
+
+---
+
+### ❌ Delete Record
 
 ```http
-  DELETE {BASEURL}/sdd/:tableName
+DELETE {BASEURL}/sdd/:tableName/:id
 ```
-- params:
-| Parameter  | Description                |
-| :--------  | :------------------------- |
-| `tableName`  | **Required** |
 
+#### Parameters
 
-## Environment Variables
+| Parameter   | Description     |
+|-------------|-----------------|
+| `tableName` | **Required**     |
+| `id`        | **Required**     |
 
-To run this project, you will need to add the following environment variables to 3 kibnd of .env file
+---
 
+### 🗑️ Delete Table
 
-- .json.env:
-`PORT=3000`
-`SDD_STORE_TYPE=JSON`
+```http
+DELETE {BASEURL}/sdd/:tableName
+```
 
-- .yaml.env:
-`PORT=3000`
-`SDD_STORE_TYPE=YAML`
+#### Parameters
 
-- .binary.env:
-`PORT=3000`
-`SDD_STORE_TYPE=BINARY`
+| Parameter   | Description     |
+|-------------|-----------------|
+| `tableName` | **Required**     |
+
+---
+
+## ⚙️ Environment Variables
+
+To run this project, you'll need one of the following `.env` files depending on the storage format you want to use:
+
+### `.json.env`
+
+```env
+PORT=3000
+SDD_STORE_TYPE=JSON
+```
+
+### `.yaml.env`
+
+```env
+PORT=3000
+SDD_STORE_TYPE=YAML
+```
+
+### `.binary.env`
+
+```env
+PORT=3000
+SDD_STORE_TYPE=BINARY
+```
+
+---
+
+## 📌 Notes
+
+- Records are **schema-less**, supporting any arbitrary key-value structure.
+- You can interact with the database via HTTP or CLI.
+- All data is persisted to disk in the selected format.
